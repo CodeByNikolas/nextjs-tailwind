@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useMemo, useState } from "react";
+import { FormEvent, useEffect, useMemo, useState } from "react";
 import { formatUnits, isAddress, parseUnits, zeroAddress, type Address } from "viem";
 import {
   useAccount,
@@ -32,6 +32,10 @@ function formatTokenAmount(value: bigint | undefined, decimals = 18) {
   return trimmedFraction ? `${whole}.${trimmedFraction}` : whole;
 }
 
+function detectInjectedWallet() {
+  return typeof window !== "undefined" && "ethereum" in window;
+}
+
 export function TokenPanel() {
   const { address, isConnected } = useAccount();
   const chainId = useChainId();
@@ -48,6 +52,26 @@ export function TokenPanel() {
   const [recipient, setRecipient] = useState("");
   const [transferAmount, setTransferAmount] = useState("1");
   const [formError, setFormError] = useState("");
+  const [hasInjectedWallet, setHasInjectedWallet] = useState(detectInjectedWallet);
+
+  useEffect(() => {
+    function handleProviderAnnouncement() {
+      setHasInjectedWallet(true);
+    }
+
+    window.addEventListener(
+      "eip6963:announceProvider",
+      handleProviderAnnouncement,
+    );
+    window.dispatchEvent(new Event("eip6963:requestProvider"));
+
+    return () => {
+      window.removeEventListener(
+        "eip6963:announceProvider",
+        handleProviderAnnouncement,
+      );
+    };
+  }, []);
 
   const contractAddress = tokenAddress ?? zeroAddress;
   const contractReady = tokenAddress !== undefined;
@@ -167,19 +191,41 @@ export function TokenPanel() {
       </div>
 
       {!isConnected ? (
-        <div className="grid gap-3 sm:grid-cols-2">
-          {connectors.map((connector) => (
-            <button
-              className="border border-cyan-200/30 bg-cyan-200 px-4 py-3 text-sm font-black uppercase text-black transition hover:-translate-y-0.5 hover:bg-emerald-200 disabled:cursor-not-allowed disabled:opacity-60"
-              disabled={isConnecting}
-              key={connector.uid}
-              onClick={() => connect({ connector })}
-              type="button"
-            >
-              Connect {connector.name}
-            </button>
-          ))}
-        </div>
+        <>
+          {hasInjectedWallet ? (
+            <div className="grid gap-3 sm:grid-cols-2">
+              {connectors.map((connector) => (
+                <button
+                  className="border border-cyan-200/30 bg-cyan-200 px-4 py-3 text-sm font-black uppercase text-black transition hover:-translate-y-0.5 hover:bg-emerald-200 disabled:cursor-not-allowed disabled:opacity-60"
+                  disabled={isConnecting}
+                  key={connector.uid}
+                  onClick={() => connect({ connector })}
+                  type="button"
+                >
+                  Connect wallet
+                </button>
+              ))}
+            </div>
+          ) : (
+            <div className="border border-dashed border-cyan-200/30 bg-white/[0.06] p-4">
+              <p className="text-sm font-semibold text-cyan-50">
+                No browser wallet detected.
+              </p>
+              <p className="mt-1 text-sm text-cyan-100/70">
+                Install MetaMask or open this page in a wallet browser to claim
+                and send TUMBC.
+              </p>
+              <a
+                className="mt-3 inline-flex border border-cyan-200/50 bg-cyan-200 px-4 py-3 text-sm font-black uppercase text-black transition hover:bg-emerald-200"
+                href="https://metamask.io/download/"
+                rel="noreferrer"
+                target="_blank"
+              >
+                Install MetaMask
+              </a>
+            </div>
+          )}
+        </>
       ) : null}
 
       {isConnected && !onSepolia ? (
@@ -271,7 +317,12 @@ export function TokenPanel() {
       </div>
 
       <div className="mt-4 space-y-2 text-sm text-cyan-100/80">
-        {connectError ? <p>{connectError.message}</p> : null}
+        {connectError ? (
+          <p>
+            Could not connect. Make sure MetaMask or another injected wallet is
+            installed and unlocked.
+          </p>
+        ) : null}
         {formError ? <p>{formError}</p> : null}
         {writeError ? <p>{writeError.message}</p> : null}
         {isWriting ? <p>Confirm the transaction in your wallet.</p> : null}
