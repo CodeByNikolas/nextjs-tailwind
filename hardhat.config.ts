@@ -1,6 +1,9 @@
 import hardhatEthers from "@nomicfoundation/hardhat-ethers";
 import hardhatIgnitionEthers from "@nomicfoundation/hardhat-ignition-ethers";
 import { configVariable, defineConfig } from "hardhat/config";
+import process from "node:process";
+
+process.loadEnvFile?.(".env.local");
 
 export default defineConfig({
   plugins: [hardhatEthers, hardhatIgnitionEthers],

@@ -1,5 +1,7 @@
 import { isAddress, type Address } from "viem";
 
+const deployedSepoliaAddress = "0xDeA747134aD4bE420219107eBD48474776fA0de7";
+
 export const tokenAbi = [
   {
     type: "function",
@@ -62,7 +64,8 @@ export const tokenAbi = [
   },
 ] as const;
 
-const configuredAddress = process.env.NEXT_PUBLIC_ERC20_ADDRESS;
+const configuredAddress =
+  process.env.NEXT_PUBLIC_ERC20_ADDRESS || deployedSepoliaAddress;
 
 export const tokenAddress = isAddress(configuredAddress ?? "")
   ? (configuredAddress as Address)
