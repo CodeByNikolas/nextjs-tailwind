@@ -1,3 +1,5 @@
+import { CommentWall } from "@/app/components/comment-wall";
+
 export default function Home() {
   return (
     <div className="relative grid min-h-screen overflow-hidden bg-[#050505] text-white">
@@ -14,6 +16,7 @@ export default function Home() {
             Tum Blockchain Club is the BEST
           </h1>
           <div className="spark-line h-1 w-56 rounded-full bg-cyan-300" />
+          <CommentWall />
         </section>
       </main>
     </div>
