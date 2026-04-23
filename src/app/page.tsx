@@ -1,4 +1,5 @@
 import { CommentWall } from "@/app/components/comment-wall";
+import { TokenPanel } from "@/app/components/token-panel";
 
 export default function Home() {
   return (
@@ -16,6 +17,7 @@ export default function Home() {
             Tum Blockchain Club is the BEST
           </h1>
           <div className="spark-line h-1 w-56 rounded-full bg-cyan-300" />
+          <TokenPanel />
           <CommentWall />
         </section>
       </main>

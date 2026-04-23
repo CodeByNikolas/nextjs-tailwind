@@ -13,6 +13,12 @@
 # testing
 /coverage
 
+# hardhat
+/artifacts
+/cache
+/ignition/deployments
+/ignition/.chain-*
+
 # next.js
 /.next/
 /out/
