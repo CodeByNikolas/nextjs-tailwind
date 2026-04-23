@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #050505;
+  --foreground: #f8fafc;
 }
 
 @theme inline {
@@ -14,13 +14,141 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #050505;
+    --foreground: #f8fafc;
   }
+}
+
+* {
+  box-sizing: border-box;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+.grid-pattern {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.07) 1px, transparent 1px);
+  background-size: 52px 52px;
+  mask-image: radial-gradient(circle at center, black 0%, transparent 72%);
+  animation: grid-drift 18s linear infinite;
+}
+
+.motion-card {
+  animation: float-in 900ms cubic-bezier(0.16, 1, 0.3, 1) both,
+    hover-drift 5s ease-in-out 1s infinite;
+}
+
+.eyebrow {
+  animation: pulse-chip 2.4s ease-in-out infinite;
+}
+
+.kinetic-title {
+  text-shadow:
+    0 0 18px rgba(103, 232, 249, 0.42),
+    0 0 52px rgba(45, 212, 191, 0.28),
+    0 18px 68px rgba(0, 0, 0, 0.5);
+  animation: title-surge 3.6s ease-in-out infinite;
+}
+
+.spark-line {
+  box-shadow:
+    0 0 26px rgba(103, 232, 249, 0.95),
+    0 0 72px rgba(16, 185, 129, 0.65);
+  animation: spark-scan 1.8s ease-in-out infinite;
+}
+
+.glow-orbit {
+  box-shadow:
+    inset 0 0 80px rgba(34, 211, 238, 0.12),
+    0 0 120px rgba(20, 184, 166, 0.22);
+  animation: orbit-spin 14s linear infinite;
+}
+
+@keyframes float-in {
+  from {
+    opacity: 0;
+    transform: translateY(32px) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes hover-drift {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-0.6deg);
+  }
+
+  50% {
+    transform: translateY(-16px) rotate(0.6deg);
+  }
+}
+
+@keyframes title-surge {
+  0%,
+  100% {
+    transform: scale(1);
+    filter: saturate(1);
+  }
+
+  50% {
+    transform: scale(1.035);
+    filter: saturate(1.5);
+  }
+}
+
+@keyframes pulse-chip {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.86;
+  }
+
+  50% {
+    transform: translateY(-4px);
+    opacity: 1;
+  }
+}
+
+@keyframes spark-scan {
+  0%,
+  100% {
+    transform: scaleX(0.62);
+    opacity: 0.62;
+  }
+
+  50% {
+    transform: scaleX(1.1);
+    opacity: 1;
+  }
+}
+
+@keyframes orbit-spin {
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+@keyframes grid-drift {
+  to {
+    background-position: 52px 52px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
 }
