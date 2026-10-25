@@ -5,7 +5,7 @@ Repository guidance for coding agents working on this tutorial project.
 <!-- BEGIN:nextjs-agent-rules -->
 # This is NOT the Next.js you know
 
-This project uses Next.js 16.2.x. APIs, defaults, and build behavior may differ
+This project uses Next.js 16.4.x. APIs, defaults, and build behavior may differ
 from older examples. Read local or official Next.js 16 docs before changing app
 router, config, server route, or build behavior. Heed deprecation notices.
 <!-- END:nextjs-agent-rules -->

@@ -34,3 +34,14 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Dependency maintenance
+
+Use `pnpm install --frozen-lockfile --ignore-scripts`, `pnpm lint`, and
+`pnpm build` to verify frontend dependency updates. Verify Hardhat updates with
+`pnpm contracts:compile` using local build configuration; compilation must not
+deploy contracts.
+
+Upstream Web3 and Hardhat packages still require Zod 3. The verification tooling
+also includes elliptic 6.6.1. Track upstream compatible fixes rather than forcing
+new major APIs through dependency overrides.
